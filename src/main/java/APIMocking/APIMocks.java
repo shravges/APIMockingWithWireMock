@@ -2,9 +2,12 @@ package APIMocking;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.delete;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 
 
@@ -48,6 +51,31 @@ public class APIMocks {
 							.withHeader("Content-Type", "application/json")
 							.withBodyFile("user.json")));
 	}
+	
+	
+	//create new user with mocking
+	public static void createDummyUser()
+	{
+		//create new user and gives response from json file
+		WireMock.stubFor(post(urlEqualTo("/api/users"))
+				.withHeader("Content-Type", equalTo("application/json"))
+				.willReturn(aResponse()
+						.withStatus(201)
+						.withHeader("Content-Type","application/json")
+						.withBodyFile("createUser.json")));
+	}
+	
+	
+	public static void deleteDummyUser()
+	{
+		//http://localhost:8089/api/users/id  --
+		WireMock.stubFor(delete(urlPathMatching("/users/\\d+"))
+				.willReturn(aResponse()
+						.withHeader("Content-Type","application/json")
+						.withStatus(204)
+						));
+	}
+	
 	
 	
 }
